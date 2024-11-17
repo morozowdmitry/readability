@@ -1,7 +1,9 @@
 from pathlib import Path
 
-MODELS_PATH = (Path(__name__).parent.parent / "pretrained_models").resolve()
-STANZA_PATH = MODELS_PATH / 'stanza_rubicdata_tokenizer.pt'
+RESOURCES_DIR = (Path(__name__).parent.parent / "external_resources").resolve()
+STANZA_PATH = RESOURCES_DIR / 'stanza_rubicdata_tokenizer.pt'
+FREQUENCY_RUS_PATH = RESOURCES_DIR / 'frequency/rus/freqrnc2011.tsv'
+FREQUENCY_ENG_PATH = RESOURCES_DIR / 'frequency/eng/all_words.txt'
 
 DATA_PATH = (Path(__name__).parent.parent / "data").resolve()
 
