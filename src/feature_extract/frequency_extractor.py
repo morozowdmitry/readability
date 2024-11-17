@@ -54,19 +54,13 @@ class FrequencyExtractor(BaseExtractor):
         if pos is not None:
             for i in range(10):
                 freq_enough = [
-                    _t
-                    for _s in text.sentences
-                    for _t in _s.tokens
-                    if _t.token_type == TokenType.WORD
-                       and _t.pos in pos_variants[pos]
-                       and _t.frequency.pos_category == i
+                    _t for _t in text.words_sample()
+                    if _t.pos in pos_variants[pos] and _t.frequency.pos_category == i
                 ]
                 all_pos = [
                     _t
-                    for _s in text.sentences
-                    for _t in _s.tokens
-                    if _t.token_type == TokenType.WORD
-                       and _t.pos in pos_variants[pos]
+                    for _t in text.words_sample()
+                    if _t.pos in pos_variants[pos]
                 ]
                 ratios[f'ratio_{i}_{pos}'] = len(freq_enough) / len(all_pos) if len(all_pos) > 0 else 0
         else:
