@@ -25,7 +25,7 @@ class MorphologyExtractor(BaseExtractor):
 
     @staticmethod
     def _pos_ratio(text: Text) -> dict:
-        pos_number = Counter([_t.pos for _s in text.sentences for _t in _s.tokens if _t.token_type == TokenType.WORD])
+        pos_number = Counter([_t.pos for _t in text.words_sample()])
         return {
             'NOUN_ratio': pos_number['NOUN'] / text.words_number(),
             'ADJ_ratio': (pos_number['ADJF'] + pos_number['ADJS']) / text.words_number(),
@@ -46,9 +46,8 @@ class MorphologyExtractor(BaseExtractor):
         cases = ['nomn', 'gent', 'datv', 'accs', 'ablt', 'loct', 'voct', 'gen2', 'acc2', 'loc2']
         case_number = Counter([
             _t.morph.case
-            for _s in text.sentences
-            for _t in _s.tokens
-            if _t.token_type == TokenType.WORD and _t.morph.case is not None
+            for _t in text.words_sample()
+            if _t.morph.case is not None
         ])
         total_case_number = sum(case_number.values()) if sum(case_number.values()) > 0 else 1
         return {
@@ -59,9 +58,8 @@ class MorphologyExtractor(BaseExtractor):
     def _anim_ratio(text: Text) -> dict:
         anim_number = Counter([
             _t.morph.animacy
-            for _s in text.sentences
-            for _t in _s.tokens
-            if _t.token_type == TokenType.WORD and _t.morph.animacy is not None
+            for _t in text.words_sample()
+            if _t.morph.animacy is not None
         ])
         total_anim_number = sum(anim_number.values()) if sum(anim_number.values()) > 0 else 1
         return {
@@ -72,9 +70,8 @@ class MorphologyExtractor(BaseExtractor):
     def _verb_form_ratio(text: Text) -> dict:
         verb_form_number = Counter([
             _t.pos
-            for _s in text.sentences
-            for _t in _s.tokens
-            if _t.token_type == TokenType.WORD and _t.pos in ['VERB', 'INFN', 'PRTF', 'PRTS', 'GRND']
+            for _t in text.words_sample()
+            if _t.pos in ['VERB', 'INFN', 'PRTF', 'PRTS', 'GRND']
         ])
         total_verb_number = sum(verb_form_number.values()) if sum(verb_form_number.values()) > 0 else 1
         return {
@@ -86,11 +83,8 @@ class MorphologyExtractor(BaseExtractor):
         tenses = ['pres', 'past', 'futr']
         tense_number = Counter([
             _t.morph.tense
-            for _s in text.sentences
-            for _t in _s.tokens
-            if _t.token_type == TokenType.WORD
-               and _t.pos in ['VERB', 'INFN', 'PRTF', 'PRTS', 'GRND']
-               and _t.morph.tense is not None
+            for _t in text.words_sample()
+            if _t.pos in ['VERB', 'INFN', 'PRTF', 'PRTS', 'GRND'] and _t.morph.tense is not None
         ])
         total_tense_number = sum(tense_number.values()) if sum(tense_number.values()) else 1
         return {
@@ -101,9 +95,8 @@ class MorphologyExtractor(BaseExtractor):
     def _verb_tran_ratio(text: Text) -> dict:
         tran_number = Counter([
             _t.morph.transitivity
-            for _s in text.sentences
-            for _t in _s.tokens
-            if _t.token_type == TokenType.WORD and _t.morph.transitivity is not None
+            for _t in text.words_sample()
+            if _t.morph.transitivity is not None
         ])
         total_tran_number = sum(tran_number.values()) if sum(tran_number.values()) else 1
         return {

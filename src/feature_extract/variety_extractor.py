@@ -14,14 +14,13 @@ class NAVExtractor(BaseExtractor):
         all_adj = list()
         all_verbs = list()
 
-        for sentence in text.sentences:
-            for token in sentence.tokens:
-                if token.pos in {'NOUN', 'n'}:
-                    all_nouns.append(token.lex)
-                elif token.pos in {'VERB', 'INFN', 'v'}:
-                    all_verbs.append(token.lex)
-                elif token.pos in {'ADJF', 'ADJS', 'a'}:
-                    all_adj.append(token.lex)
+        for token in text.words_sample():
+            if token.pos in {'NOUN', 'n'}:
+                all_nouns.append(token.lex)
+            elif token.pos in {'VERB', 'INFN', 'v'}:
+                all_verbs.append(token.lex)
+            elif token.pos in {'ADJF', 'ADJS', 'a'}:
+                all_adj.append(token.lex)
 
         ttr_n = len(set(all_nouns)) / len(all_nouns) if len(all_nouns) > 0 else -1
         ttr_a = len(set(all_adj)) / len(all_adj) if len(all_adj) > 0 else -1

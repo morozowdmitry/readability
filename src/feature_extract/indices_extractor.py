@@ -72,9 +72,7 @@ class IndicesExtractor(SyllablesExtractor):
         avg_sent_length = text.sentences_mean_length()
         word2syllables = [
             self._count_syllables(_t, text.language)
-            for _s in text.sentences
-            for _t in _s.tokens
-            if _t.pos is not None
+            for _t in text.words_sample()
         ]
         avg_syllables = statistics.mean(word2syllables) if word2syllables else 0
         consts = self.language_constants['flesch_kincaid'][text.language]
@@ -101,10 +99,9 @@ class IndicesExtractor(SyllablesExtractor):
 
     def _smog(self, text: Text) -> Text:
         num_long = len([
-            x
-            for sentence in text.sentences
-            for x in sentence.tokens
-            if x.pos is not None and self._count_syllables(x, text.language) > 4
+            _t
+            for _t in text.words_sample()
+            if self._count_syllables(_t, text.language) > 4
         ])
         num_sents = len(text.sentences)
         consts = self.language_constants['smog'][text.language]
@@ -114,10 +111,9 @@ class IndicesExtractor(SyllablesExtractor):
 
     def _dave_chall(self, text: Text) -> Text:
         num_long = len([
-            x
-            for sentence in text.sentences
-            for x in sentence.tokens
-            if x.pos is not None and self._count_syllables(x, text.language) > 4
+            _t
+            for _t in text.words_sample()
+            if self._count_syllables(_t, text.language) > 4
         ])
         num_sents = text.sentences_number()
         num_words = text.words_number()
@@ -133,12 +129,7 @@ class LongWordsExtractor(SyllablesExtractor):
         self.extractor_label = 'LONG_WORDS'
 
     def _count_features(self, text: Text) -> Text:
-        tokens = [
-            token
-            for sentence in text.sentences
-            for token in sentence.tokens
-            if token.token_type == TokenType.WORD
-        ]
+        tokens = text.words_sample()
         long_tokens = [x for x in tokens if self._count_syllables(x, text.language) > 4]
         self._add_feature(text, 'long_words_ratio', float(len(long_tokens)) / len(tokens))
         return text
