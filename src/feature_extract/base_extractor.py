@@ -36,7 +36,7 @@ class BaseExtractor(object):
             sampled = random.sample(accumulated, MIN_CLASS_SIZE)
         else:
             sampled = accumulated
-        q1, q2, q3 = statistics.quantiles(sampled) if len(sampled) >= 1 else [0, 0, 0]
+        q1, q2, q3 = statistics.quantiles(sampled) if len(sampled) > 1 else [0, 0, 0]
         return {
             f'average_{label}': statistics.mean(sampled) if len(sampled) >= 1 else 0,
             f'25_perc_{label}': q1,
