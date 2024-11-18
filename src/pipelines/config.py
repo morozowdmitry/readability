@@ -17,7 +17,7 @@ class PipelineConfig(object):
             labelers: List[Tuple[BaseLabeler, Set[LabelType]]],
             extractors: Iterable[BaseExtractor],
             predictor: BasePredictor,
-            model_path: Path,
+            model_path: Path = None,
             labeled_path: Optional[Path] = None,
             vectorizer: Optional[BaseVectorizer] = None,
             vectorizer_train_only: Optional[bool] = False,
