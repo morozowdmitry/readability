@@ -1,5 +1,5 @@
 import random
-from typing import Optional, Iterable, Set, Dict, Any, List
+from typing import Optional, Iterable, Set, Dict, List
 from enum import Enum
 
 import statistics

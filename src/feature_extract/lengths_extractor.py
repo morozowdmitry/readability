@@ -1,4 +1,4 @@
-from typing import Dict, Any
+from typing import Dict
 
 from src.data_handlers.text import Text, LabelType
 from src.feature_extract.base_extractor import BaseExtractor
@@ -19,10 +19,10 @@ class LengthsExtractor(BaseExtractor):
         return text
 
 
-    def _sentences_length(self, text: Text) -> Dict[str, Any[int, float]]:
+    def _sentences_length(self, text: Text) -> Dict[str, int | float]:
         sent_lengths = text.sentence_lengths()
         return self._stats(sent_lengths, label='sentence_length')
 
-    def _words_length(self, text: Text) -> Dict[str, Any[int, float]]:
+    def _words_length(self, text: Text) -> Dict[str, int | float]:
         word_lengths = text.word_lengths()
         return self._stats(word_lengths, label='word_length')

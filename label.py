@@ -10,6 +10,7 @@ from src.label.labels import LabelType
 from src.label.pymorphy import PymorphyLemmatizer
 from src.label.frequency import FrequencyLabeler
 from src.label.spacy_syntax import SpacySyntaxLabeler
+from src.label.morpheme import MorphemeCNNLabeler
 
 from src.feature_extract.variety_extractor import NAVExtractor, LexicalVarietyExtractor
 from src.feature_extract.lengths_extractor import LengthsExtractor
@@ -18,6 +19,7 @@ from src.feature_extract.frequency_extractor import FrequencyExtractor
 from src.feature_extract.punctuation_extractor import PunctuationExtractor
 from src.feature_extract.morphology_extractor import MorphologyExtractor
 from src.feature_extract.syntax_extractor import SimpleSyntaxExtractor
+from src.feature_extract.morpheme_extractor import MorphemeVarietyExtractor
 
 from src.predict.base_predictor import BasePredictor
 
@@ -37,7 +39,8 @@ simple_config = PipelineConfig(
     labelers=[
         (PymorphyLemmatizer(), {LabelType.MORPH, LabelType.LEMMA}),
         (FrequencyLabeler(), {LabelType.FREQUENCY, }),
-        (SpacySyntaxLabeler(), {LabelType.SYNTAX, })
+        (SpacySyntaxLabeler(), {LabelType.SYNTAX, }),
+        (MorphemeCNNLabeler(), {LabelType.MORPHEME}),
     ],
     extractors=[
         NAVExtractor(),
@@ -48,7 +51,8 @@ simple_config = PipelineConfig(
         FrequencyExtractor(),
         PunctuationExtractor(),
         MorphologyExtractor(),
-        SimpleSyntaxExtractor(),
+        # SimpleSyntaxExtractor(),
+        MorphemeVarietyExtractor(),
     ],
     predictor=BasePredictor()
 )

@@ -1,4 +1,4 @@
-from typing import List, Dict, Any
+from typing import List, Dict
 
 import statistics
 from collections import Counter, defaultdict
@@ -114,7 +114,7 @@ class RichSyntaxExtractor(BaseSyntaxExtractor):
             self._add_feature(text, k, v)
         return text
 
-    def _evaluate_features(self, text: Text) -> Dict[str, Any[int, float]]:
+    def _evaluate_features(self, text: Text) -> Dict[str, int | float]:
         features = dict()
         features.update(self._count_edge_types(text))
         features.update(self._count_children(text))
@@ -123,7 +123,7 @@ class RichSyntaxExtractor(BaseSyntaxExtractor):
         features.update(self._tree_depth(text))
         return features
 
-    def _count_edge_types(self, text: Text) -> Dict[str, Any[int, float]]:
+    def _count_edge_types(self, text: Text) -> Dict[str, int | float]:
         edge_types_features = dict()
         edge_types = [
             'acl', 'acl:relcl', 'advcl', 'advmod', 'amod', 'appos', 'aux', 'aux:pass',
@@ -146,13 +146,13 @@ class RichSyntaxExtractor(BaseSyntaxExtractor):
             edge_types_features.update(self._stats(v, label=f'edge_{k}'))
         return edge_types_features
 
-    def _count_vertices(self, text: Text) -> Dict[str, Any[int, float]]:
+    def _count_vertices(self, text: Text) -> Dict[str, int | float]:
         vertices_number = list()
         for sent in text.sentences:
             vertices_number += sent.words_number()
         return self._stats(vertices_number, 'vertices')
 
-    def _count_children(self, text: Text) -> Dict[str, Any[int, float]]:
+    def _count_children(self, text: Text) -> Dict[str, int | float]:
         children_features = dict()
         sent_stats = defaultdict(list)
         for sent in text.sentences:
@@ -174,7 +174,7 @@ class RichSyntaxExtractor(BaseSyntaxExtractor):
         return children_features
 
     @staticmethod
-    def _stats(accumulated, label, sampling=True) -> Dict[str, Any[int, float]]:
+    def _stats(accumulated, label, sampling=True) -> Dict[str, int | float]:
         return {
             f'average_{label}': statistics.mean(accumulated) if len(accumulated) >= 1 else 0,
             f'median_{label}': statistics.median(accumulated) if len(accumulated) >= 1 else 0,

@@ -6,3 +6,5 @@ gensim~=4.3.2
 tqdm~=4.67.0
 pymorphy2~=0.9.1
 stanza~=1.9.2
+tensorflow~=2.12.1
+keras~=2.12.0
