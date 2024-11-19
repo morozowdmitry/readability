@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Dict, Any
 
 import statistics
 
@@ -26,7 +26,7 @@ class FrequencyExtractor(BaseExtractor):
         return text
 
     @staticmethod
-    def _avg_frequency(text: Text) -> dict:
+    def _avg_frequency(text: Text) -> Dict[str, Any[int, float]]:
         freq_list = [
             _t.frequency.frequency
             for _t in text.words_sample()
@@ -41,9 +41,10 @@ class FrequencyExtractor(BaseExtractor):
         }
 
     @staticmethod
-    def _ratio_frequency(text: Text, pos: Optional[str] = None) -> dict:  # FIXME change after creating enum for pos
+    def _ratio_frequency(text: Text, pos: Optional[str] = None) -> Dict[str, Any[int, float]]:
         ratios = dict()
 
+        # FIXME change after creating enum for pos
         pos_variants = {
             'NOUN': ['NOUN'],
             'VERB': ['VERB', 'INFN', 'PRTF', 'PRTS', 'GRND'],

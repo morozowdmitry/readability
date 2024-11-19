@@ -3,7 +3,7 @@ from typing import Set
 
 from src.label.base_labeler import BaseLabeler
 from src.label.labels import LabelType
-from src.data_handlers.text import TokenType
+from src.data_handlers.text import Text, TokenType
 
 
 class PymorphyLemmatizer(BaseLabeler):
@@ -13,7 +13,7 @@ class PymorphyLemmatizer(BaseLabeler):
         self.morph_analyzer = pymorphy2.MorphAnalyzer()
         self.lemmas_dictionary = dict()
 
-    def _label(self, text, labels):
+    def _label(self, text, labels) -> Text:
         for sentence in text.sentences:
             for token in sentence.tokens:
                 self._parse_token(token, labels)

@@ -20,7 +20,7 @@ class FrequencyLabeler(BaseLabeler):
         }
 
     @staticmethod
-    def _load_rnc():
+    def _load_rnc() -> FrequencyDict:
         rnc_dict_reader = csv.DictReader(open(FREQUENCY_RUS_PATH, 'r'), delimiter='\t')
         freq_dict = FrequencyDict()
 
@@ -43,8 +43,9 @@ class FrequencyLabeler(BaseLabeler):
         return freq_dict
 
     # TODO add code for English texts
-    def _load_bnc(self):
-        return
+    def _load_bnc(self) -> FrequencyDict:
+        freq_dict = FrequencyDict()
+        return freq_dict
 
     def _label(self, text: Text, labels: Set[LabelType]):
         for _s in text.sentences:

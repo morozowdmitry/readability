@@ -1,6 +1,5 @@
 from src.data_handlers.text import Text, TokenType
 from src.feature_extract.base_extractor import BaseExtractor
-from src.label.labels import LabelType
 
 
 class PunctuationExtractor(BaseExtractor):
@@ -14,7 +13,7 @@ class PunctuationExtractor(BaseExtractor):
         return text
 
     @staticmethod
-    def _punct_token_ratio(text):
+    def _punct_token_ratio(text) -> float:
         return len([
                 _t
                 for _s in text.sentences
@@ -23,7 +22,7 @@ class PunctuationExtractor(BaseExtractor):
             ]) / text.words_number()
 
     @staticmethod
-    def _semicolon_punct_ratio(text):
+    def _semicolon_punct_ratio(text) -> float:
         puncts = [
             _t
             for _s in text.sentences

@@ -3,7 +3,7 @@ from spacy.tokens import Doc
 
 from src.label.base_labeler import BaseLabeler
 from src.label.labels import LabelType
-from src.data_handlers.text import TokenType
+from src.data_handlers.text import Text
 from src.data_handlers.syntax import SyntaxParsing
 
 
@@ -13,7 +13,7 @@ class SpacySyntaxLabeler(BaseLabeler):
         self.labels = {LabelType.SYNTAX}
         self.spacy_pipeline = spacy.load('ru_core_news_lg')
 
-    def _label(self, text, labels):
+    def _label(self, text, labels) -> Text:
         for sentence in text.sentences:
             doc = self.spacy_pipeline(Doc(self.spacy_pipeline.vocab,
                                           words=[x.wordform for x in sentence.tokens],

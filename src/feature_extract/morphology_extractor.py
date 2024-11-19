@@ -1,3 +1,5 @@
+from typing import Dict
+
 from collections import Counter
 
 from src.data_handlers.text import Text, TokenType
@@ -24,7 +26,7 @@ class MorphologyExtractor(BaseExtractor):
         return text
 
     @staticmethod
-    def _pos_ratio(text: Text) -> dict:
+    def _pos_ratio(text: Text) -> Dict[str, float]:
         pos_number = Counter([_t.pos for _t in text.words_sample()])
         return {
             'NOUN_ratio': pos_number['NOUN'] / text.words_number(),
@@ -42,7 +44,7 @@ class MorphologyExtractor(BaseExtractor):
         }
 
     @staticmethod
-    def _case_ratio(text: Text) -> dict:
+    def _case_ratio(text: Text) -> Dict[str, float]:
         cases = ['nomn', 'gent', 'datv', 'accs', 'ablt', 'loct', 'voct', 'gen2', 'acc2', 'loc2']
         case_number = Counter([
             _t.morph.case
@@ -55,7 +57,7 @@ class MorphologyExtractor(BaseExtractor):
         }
 
     @staticmethod
-    def _anim_ratio(text: Text) -> dict:
+    def _anim_ratio(text: Text) -> Dict[str, float]:
         anim_number = Counter([
             _t.morph.animacy
             for _t in text.words_sample()
@@ -67,7 +69,7 @@ class MorphologyExtractor(BaseExtractor):
         }
 
     @staticmethod
-    def _verb_form_ratio(text: Text) -> dict:
+    def _verb_form_ratio(text: Text) -> Dict[str, float]:
         verb_form_number = Counter([
             _t.pos
             for _t in text.words_sample()
@@ -79,7 +81,7 @@ class MorphologyExtractor(BaseExtractor):
         }
 
     @staticmethod
-    def _verb_tense_ratio(text: Text) -> dict:
+    def _verb_tense_ratio(text: Text) -> Dict[str, float]:
         tenses = ['pres', 'past', 'futr']
         tense_number = Counter([
             _t.morph.tense
@@ -92,7 +94,7 @@ class MorphologyExtractor(BaseExtractor):
         }
 
     @staticmethod
-    def _verb_tran_ratio(text: Text) -> dict:
+    def _verb_tran_ratio(text: Text) -> Dict[str, float]:
         tran_number = Counter([
             _t.morph.transitivity
             for _t in text.words_sample()

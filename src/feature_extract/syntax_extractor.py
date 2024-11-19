@@ -1,4 +1,4 @@
-from typing import List, Dict
+from typing import List, Dict, Any
 
 import statistics
 from collections import Counter, defaultdict
@@ -13,7 +13,7 @@ class BaseSyntaxExtractor(BaseExtractor):
         super().__init__()
         self.required_labels = {LabelType.SYNTAX}
 
-    def _count_dep2sent(self, text: Text, deps: List[str], label: str):
+    def _count_dep2sent(self, text: Text, deps: List[str], label: str) -> Dict[str, float]:
         sent_dep_num = [
             len([
                 _t for _t in _s.tokens
@@ -23,32 +23,33 @@ class BaseSyntaxExtractor(BaseExtractor):
         ]
         return self._stats(sent_dep_num, label)
 
-    def _max_linear_distance(self, text: Text):
+    def _max_linear_distance(self, text: Text) -> Dict[str, float]:
         max_distances = list()
         for sent in text.sentences:
             max_distance = max(abs(token.syntax.idx - token.syntax.head_idx) for token in sent.tokens)
             max_distances.append(max_distance)
         return self._stats(max_distances, 'max_distance')
 
-    def _mean_linear_distance(self, text: Text):
+    def _mean_linear_distance(self, text: Text) -> Dict[str, float]:
         mean_distances = list()
         for sent in text.sentences:
             mean_distance = statistics.mean(abs(token.syntax.idx - token.syntax.head_idx) for token in sent.tokens)
             mean_distances.append(mean_distance)
         return self._stats(mean_distances, 'mean_distance')
 
-    def _tree_depth(self, text: Text):
+    def _tree_depth(self, text: Text) -> Dict[str, float]:
         tree_depths = list()
         for sent in text.sentences:
             root_token = [token for token in sent.tokens if token.syntax.is_root][0]
             tree_depths.append(self._tree_step(sentence=sent, token=root_token, current_depth=0))
         return self._stats(tree_depths, 'tree_depth')
 
-    def _tree_step(self, sentence: Sentence, token: Token, current_depth: int):
+    def _tree_step(self, sentence: Sentence, token: Token, current_depth: int) -> int:
         if token.syntax.children_idx:
-            return max(self._tree_step(sentence=sentence,
-                                       token=sentence.tokens[idx],
-                                       current_depth=current_depth) for idx in token.syntax.children_idx) + 1
+            return max(
+                self._tree_step(sentence=sentence, token=sentence.tokens[idx], current_depth=current_depth)
+                for idx in token.syntax.children_idx
+            ) + 1
         else:
             return current_depth + 1
 
@@ -73,7 +74,7 @@ class SimpleSyntaxExtractor(BaseSyntaxExtractor):
             self._add_feature(text, k, v)
         return text
 
-    def _count_clauses(self, text: Text):
+    def _count_clauses(self, text: Text) -> Dict[str, float]:
         sent_clauses_num = [
             len([
                 _t for _t in _s.tokens
@@ -83,7 +84,7 @@ class SimpleSyntaxExtractor(BaseSyntaxExtractor):
         ]
         return self._stats(sent_clauses_num, 'clauses')
 
-    def _nmod_depth(self, text: Text):
+    def _nmod_depth(self, text: Text) -> Dict[str, float]:
         nmod_depths = list()
         for sent in text.sentences:
             for token in sent.tokens:
@@ -93,7 +94,7 @@ class SimpleSyntaxExtractor(BaseSyntaxExtractor):
                     nmod_depths.append(self._nmod_step(sentence=sent, token=token, current_depth=0))
         return self._stats(nmod_depths, 'nmod_depth')
 
-    def _nmod_step(self, sentence: Sentence, token: Token, current_depth: int):
+    def _nmod_step(self, sentence: Sentence, token: Token, current_depth: int) -> int:
         if sentence.tokens[token.syntax.head_idx].syntax.dep in ["nmod", "nmod:poss"]:
             return self._nmod_step(sentence=sentence,
                                    token=sentence.tokens[token.syntax.head_idx],
@@ -113,7 +114,7 @@ class RichSyntaxExtractor(BaseSyntaxExtractor):
             self._add_feature(text, k, v)
         return text
 
-    def _evaluate_features(self, text: Text) -> Dict:
+    def _evaluate_features(self, text: Text) -> Dict[str, Any[int, float]]:
         features = dict()
         features.update(self._count_edge_types(text))
         features.update(self._count_children(text))
@@ -122,7 +123,7 @@ class RichSyntaxExtractor(BaseSyntaxExtractor):
         features.update(self._tree_depth(text))
         return features
 
-    def _count_edge_types(self, text: Text):
+    def _count_edge_types(self, text: Text) -> Dict[str, Any[int, float]]:
         edge_types_features = dict()
         edge_types = [
             'acl', 'acl:relcl', 'advcl', 'advmod', 'amod', 'appos', 'aux', 'aux:pass',
@@ -145,13 +146,13 @@ class RichSyntaxExtractor(BaseSyntaxExtractor):
             edge_types_features.update(self._stats(v, label=f'edge_{k}'))
         return edge_types_features
 
-    def _count_vertices(self, text: Text):
+    def _count_vertices(self, text: Text) -> Dict[str, Any[int, float]]:
         vertices_number = list()
         for sent in text.sentences:
             vertices_number += sent.words_number()
         return self._stats(vertices_number, 'vertices')
 
-    def _count_children(self, text: Text):
+    def _count_children(self, text: Text) -> Dict[str, Any[int, float]]:
         children_features = dict()
         sent_stats = defaultdict(list)
         for sent in text.sentences:
@@ -173,7 +174,7 @@ class RichSyntaxExtractor(BaseSyntaxExtractor):
         return children_features
 
     @staticmethod
-    def _stats(accumulated, label, sampling=True):
+    def _stats(accumulated, label, sampling=True) -> Dict[str, Any[int, float]]:
         return {
             f'average_{label}': statistics.mean(accumulated) if len(accumulated) >= 1 else 0,
             f'median_{label}': statistics.median(accumulated) if len(accumulated) >= 1 else 0,

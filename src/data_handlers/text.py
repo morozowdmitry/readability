@@ -14,6 +14,8 @@ from src.const import Language
 from src.config import MIN_CLASS_SIZE
 import random
 
+from pymorphy2.tagset import OpencorporaTag
+
 
 class TokenType(Enum):
     WORD = "WORD"
@@ -27,7 +29,7 @@ class Token(object):
             token_type: Optional[TokenType] = None,
             lex: Optional[str] = None,
             pos: Optional[str] = None,  # FIXME pos are from fixed list of constants, should change
-            morph: Optional[Iterable[str]] = None,  # FIXME grammars are from fixed list of constants, should change
+            morph: Optional[OpencorporaTag] = None,  # FIXME grammars are from fixed list of constants, should change
             syntax: Optional[SyntaxParsing] = None,  # FIXME syntax are from fixed list of constants, should change
             morphemes: Optional[MorphemeParsing] = None,
             frequency: Optional[Frequency] = None
@@ -49,7 +51,7 @@ class Sentence(object):
             'words_number': -1
         }
 
-    def words_number(self):
+    def words_number(self) -> int:
         if self.cached['words_number'] == -1:
             self.cached['words_number'] = len([_t for _t in self.tokens if _t.token_type == TokenType.WORD])
         return self.cached['words_number']
@@ -82,10 +84,10 @@ class Text(object):
             'sentences_median_length': -1,
         }
 
-    def word_lengths(self):
+    def word_lengths(self) -> List[int]:
         return [len(_t.wordform) for _s in self.sentences for _t in _s.tokens if _t.token_type == TokenType.WORD]
 
-    def words_number(self):
+    def words_number(self) -> int:
         if self.cached['words_number'] == -1:
             words_number = len([
                 _t
@@ -96,23 +98,23 @@ class Text(object):
             self.cached['words_number'] = words_number if words_number else 1
         return self.cached['words_number']
 
-    def words_mean_length(self):
+    def words_mean_length(self) -> float:
         if self.cached['words_mean_length'] == -1:
             self.cached['words_mean_length'] = statistics.mean(self.word_lengths())
         return self.cached['words_mean_length']
 
-    def words_median_length(self):
+    def words_median_length(self) -> float:
         if self.cached['words_median_length'] == -1:
             self.cached['words_median_length'] = statistics.median(self.word_lengths())
         return self.cached['words_median_length']
 
-    def words_max_length(self):
+    def words_max_length(self) -> int:
         return max(self.word_lengths())
 
-    def words_25_75_length(self):
+    def words_25_75_length(self) -> Iterable[float]:
         return np.percentile(self.word_lengths(), [25, 75], method='midpoint')
 
-    def words_sample(self):
+    def words_sample(self) -> List[Token]:
         words = [
             _t
             for _s in self.sentences
@@ -123,20 +125,20 @@ class Text(object):
             return words
         return random.sample(words, MIN_CLASS_SIZE)
 
-    def sentence_lengths(self):
+    def sentence_lengths(self) -> List[int]:
         return [_s.words_number() for _s in self.sentences]
 
-    def sentences_number(self):
+    def sentences_number(self) -> int:
         if self.cached['sentences_number'] == -1:
             self.cached['sentences_number'] = len(self.sentences)
         return self.cached['sentences_number']
 
-    def sentences_mean_length(self):
+    def sentences_mean_length(self) -> float:
         if self.cached['sentences_mean_length'] == -1:
             self.cached['sentences_mean_length'] = statistics.mean(self.sentence_lengths())
         return self.cached['sentences_mean_length']
 
-    def sentences_median_length(self):
+    def sentences_median_length(self) -> float:
         if self.cached['sentences_median_length'] == -1:
             self.cached['sentences_median_length'] = statistics.median(self.sentence_lengths())
         return self.cached['sentences_median_length']

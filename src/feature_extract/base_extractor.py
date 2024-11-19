@@ -1,4 +1,4 @@
-from typing import Set
+from typing import Set, Dict, Any
 
 import statistics
 
@@ -31,7 +31,7 @@ class BaseExtractor(object):
         return text
 
     @staticmethod
-    def _stats(accumulated, label, sampling=True):
+    def _stats(accumulated, label, sampling=True) -> Dict[str, Any[int, float]]:
         if sampling and MIN_CLASS_SIZE:
             sampled = random.sample(accumulated, MIN_CLASS_SIZE)
         else:
