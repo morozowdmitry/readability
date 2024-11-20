@@ -51,7 +51,7 @@ simple_config = PipelineConfig(
         FrequencyExtractor(),
         PunctuationExtractor(),
         MorphologyExtractor(),
-        # SimpleSyntaxExtractor(),
+        SimpleSyntaxExtractor(),
         MorphemeVarietyExtractor(),
     ],
     predictor=BasePredictor()
