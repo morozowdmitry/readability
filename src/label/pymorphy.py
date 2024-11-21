@@ -3,7 +3,7 @@ from typing import Set
 
 from src.label.base_labeler import BaseLabeler
 from src.label.labels import LabelType
-from src.data_handlers.text import Text, TokenType
+from src.data_handlers.text import Text, TokenType, PoS
 
 
 class PymorphyLemmatizer(BaseLabeler):
@@ -37,7 +37,10 @@ class PymorphyLemmatizer(BaseLabeler):
             if LabelType.LEMMA in labels:
                 token.lex = self.lemmas_dictionary[token.wordform]['lex']
             if LabelType.MORPH in labels:
-                token.pos = self.lemmas_dictionary[token.wordform]['pos']
+                if self.lemmas_dictionary[token.wordform]['pos'] is None:
+                    token.pos = PoS.NONLEX
+                else:
+                    token.pos = PoS(self.lemmas_dictionary[token.wordform]['pos'])
                 token.morph = self.lemmas_dictionary[token.wordform]['morph']
 
 

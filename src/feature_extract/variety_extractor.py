@@ -1,4 +1,4 @@
-from src.data_handlers.text import Text
+from src.data_handlers.text import Text, PoS, COMPLEX_POS
 from src.feature_extract.base_extractor import BaseExtractor
 from src.label.labels import LabelType
 
@@ -15,11 +15,11 @@ class NAVExtractor(BaseExtractor):
         all_verbs = list()
 
         for token in text.words_sample():
-            if token.pos in {'NOUN', 'n'}:
+            if token.pos == PoS.NOUN:
                 all_nouns.append(token.lex)
-            elif token.pos in {'VERB', 'INFN', 'v'}:
+            elif token.pos in [PoS.VERB, PoS.INFN]:
                 all_verbs.append(token.lex)
-            elif token.pos in {'ADJF', 'ADJS', 'a'}:
+            elif token.pos in COMPLEX_POS[PoS.ADJ]:
                 all_adj.append(token.lex)
 
         ttr_n = len(set(all_nouns)) / len(all_nouns) if len(all_nouns) > 0 else -1

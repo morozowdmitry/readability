@@ -22,13 +22,42 @@ class TokenType(Enum):
     PUNCT = "PUNCT"
 
 
+# OpenCorpora tagset + ADJ + NONLEX
+class PoS(Enum):
+    NOUN = 'NOUN'  # имя существительное
+    ADJ = 'ADJ' # все имена прилагательные
+    ADJF = 'ADJF'  # имя прилагательное (полное)
+    ADJS = 'ADJS'  # имя прилагательное (краткое)
+    COMP = 'COMP'  # компаратив
+    VERB = 'VERB'  # глагол (личная форма)
+    INFN = 'INFN'  # глагол (инфинитив)
+    PRTF = 'PRTF'  # причастие (полное)
+    PRTS = 'PRTS'  # причастие (краткое)
+    GRND = 'GRND'  # деепричастие
+    NUMR = 'NUMR'  # числительное
+    ADVB = 'ADVB'  # наречие
+    NPRO = 'NPRO'  # местоимение-существительное
+    PRED = 'PRED'  # предикатив
+    PREP = 'PREP'  # предлог
+    CONJ = 'CONJ'  # союз
+    PRCL = 'PRCL'  # частица
+    INTJ = 'INTJ'  # междометие
+    NONLEX = 'NONLEX' # не слово русского языка
+
+
+COMPLEX_POS = {
+    PoS.VERB: {PoS.VERB, PoS.INFN, PoS.PRTF, PoS.PRTS, PoS.GRND},
+    PoS.ADJ: {PoS.ADJF, PoS.ADJS}
+}
+
+
 class Token(object):
     def __init__(
             self,
             wordform: str,
             token_type: Optional[TokenType] = None,
             lex: Optional[str] = None,
-            pos: Optional[str] = None,  # FIXME pos are from fixed list of constants, should change
+            pos: Optional[PoS] = None,  # FIXME pos are from fixed list of constants, should change
             morph: Optional[OpencorporaTag] = None,  # FIXME grammars are from fixed list of constants, should change
             syntax: Optional[SyntaxParsing] = None,  # FIXME syntax are from fixed list of constants, should change
             morphemes: Optional[MorphemeParsing] = None,

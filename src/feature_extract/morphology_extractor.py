@@ -2,7 +2,7 @@ from typing import Dict
 
 from collections import Counter
 
-from src.data_handlers.text import Text, TokenType
+from src.data_handlers.text import Text, COMPLEX_POS, PoS
 from src.feature_extract.base_extractor import BaseExtractor
 from src.label.labels import LabelType
 
@@ -73,11 +73,11 @@ class MorphologyExtractor(BaseExtractor):
         verb_form_number = Counter([
             _t.pos
             for _t in text.words_sample()
-            if _t.pos in ['VERB', 'INFN', 'PRTF', 'PRTS', 'GRND']
+            if _t.pos in COMPLEX_POS[PoS.VERB]
         ])
         total_verb_number = sum(verb_form_number.values()) if sum(verb_form_number.values()) > 0 else 1
         return {
-            k: verb_form_number[k] / total_verb_number for k in ['VERB', 'INFN', 'PRTF', 'PRTS', 'GRND']
+            k.value: verb_form_number[k] / total_verb_number for k in COMPLEX_POS[PoS.VERB]
         }
 
     @staticmethod
@@ -86,7 +86,7 @@ class MorphologyExtractor(BaseExtractor):
         tense_number = Counter([
             _t.morph.tense
             for _t in text.words_sample()
-            if _t.pos in ['VERB', 'INFN', 'PRTF', 'PRTS', 'GRND'] and _t.morph.tense is not None
+            if _t.pos in COMPLEX_POS[PoS.VERB] and _t.morph.tense is not None
         ])
         total_tense_number = sum(tense_number.values()) if sum(tense_number.values()) else 1
         return {
