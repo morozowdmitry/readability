@@ -3,7 +3,7 @@ from typing import Optional, List
 
 class SyntaxParsing:
     def __init__(self,
-                 dep: Optional[str] = None,
+                 dep: Optional[str] = None,  # FIXME syntax are from fixed list of constants, should change
                  idx: Optional[int] = None,
                  head_idx: Optional[int] = None,
                  children_idx: Optional[List[int]] = None,

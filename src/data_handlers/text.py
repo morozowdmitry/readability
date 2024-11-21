@@ -57,9 +57,9 @@ class Token(object):
             wordform: str,
             token_type: Optional[TokenType] = None,
             lex: Optional[str] = None,
-            pos: Optional[PoS] = None,  # FIXME pos are from fixed list of constants, should change
-            morph: Optional[OpencorporaTag] = None,  # FIXME grammars are from fixed list of constants, should change
-            syntax: Optional[SyntaxParsing] = None,  # FIXME syntax are from fixed list of constants, should change
+            pos: Optional[PoS] = None,
+            morph: Optional[OpencorporaTag] = None,
+            syntax: Optional[SyntaxParsing] = None,
             morphemes: Optional[MorphemeParsing] = None,
             frequency: Optional[Frequency] = None
     ):
