@@ -42,6 +42,8 @@ class BasePipeline(object):
             required_labels |= set(feature_extractor.required_labels)
         if self.config.topic_modeler and self.config.topics_path is None:
             required_labels.add(LabelType.LEMMA)
+        if not self.config.extractors and self.config.preprocessor:
+            required_labels.add(LabelType.LEMMA)
 
         if required_labels:
             for raw_text in tqdm(raw_texts):

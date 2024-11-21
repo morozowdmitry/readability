@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import List
 
 from src.pipelines.base_pipeline import BasePipeline
 from src.pipelines.exceptions import NoDataError
