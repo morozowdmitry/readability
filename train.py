@@ -25,7 +25,7 @@ from src.vectorize.vectorizer import BoWVectorizer
 
 from src.predict.sklearn_predictors import SVCPredictor, RandomForestPredictor
 
-from src.config import DATA_PATH
+from src.config import DATA_PATH, MODELS_PATH
 
 
 import argparse
@@ -64,7 +64,7 @@ simple_config = PipelineConfig(
 if __name__ == "__main__":
     df = pd.read_csv(str(DATA_PATH / f'corpora/{args.corpus}/{args.dataset}.csv'))
     targets = df["category"].tolist()
-    simple_config.model_path = DATA_PATH / f'models/test_model.pt'
+    simple_config.model_path = MODELS_PATH / f'models/test_model.pt'
     simple_config.model_path.parent.mkdir(exist_ok=True, parents=True)
     train_pipeline = TrainPipeline(simple_config)
     train_pipeline.run(raw_texts=df['text'].to_list(), true_labels=targets)
