@@ -8,7 +8,9 @@ from src.convertor.convert2df import texts2df
 
 
 class InferencePipeline(BasePipeline):
-    def run(self, raw_texts: Optional[List[str]] = None, processed_texts: Optional[List[Text]] = None):
+    def run(self,
+            raw_texts: Optional[List[str]] = None,
+            processed_texts: Optional[List[Text]] = None):
         if raw_texts is None and processed_texts is None:
             raise NoDataError
 

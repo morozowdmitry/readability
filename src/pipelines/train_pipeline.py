@@ -12,7 +12,7 @@ class TrainPipeline(BasePipeline):
     def run(self,
             raw_texts: List[str] = None,
             processed_texts: Optional[List[Text]] = None,
-            true_labels: Optional[List[str]] = None):
+            true_labels: List[str] = None):
         if raw_texts is None and processed_texts is None:
             raise NoDataError
 

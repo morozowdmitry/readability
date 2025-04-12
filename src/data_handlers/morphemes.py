@@ -10,6 +10,7 @@ class MorphemeType(Enum):
     POST = "POST"
     HYPN = "HYPN"
     LINK = "LINK"
+    UNK = "UNK"
 
 
 class Morpheme(object):

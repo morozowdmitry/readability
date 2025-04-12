@@ -58,7 +58,9 @@ class MorphemeBERTLabeler(BaseLabeler):
         for letter, label in zip(lemma, bmes):
             pos = label[0]
             mtype = label[2:]
-            if pos == 'S':
+            if pos == '0':
+                parsing.append({"morpheme": letter, "type": "UNK"})
+            elif pos == 'S':
                 if current_mtext:
                     parsing.append({"morpheme": current_mtext, "type": current_mtype})
                 parsing.append({"morpheme": letter, "type": mtype})
@@ -70,6 +72,8 @@ class MorphemeBERTLabeler(BaseLabeler):
                 current_mtext = letter
                 current_mtype = mtype
             else:
+                if not current_mtype:
+                    current_mtype = mtype
                 current_mtext += letter
         if current_mtext:
             parsing.append({"morpheme": current_mtext, "type": current_mtype})
