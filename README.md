@@ -29,6 +29,8 @@ This repo contains code for evaluating linguistic features and readability level
 python -m spacy download ru_core_news_lg
 ```
 
+It is necessary to download morpheme model [Morphberta-K from the Russian National Corpus](https://ruscorpora.ru/license-content/neuromodels#section-15) and place model files in `external_resources/morphemes/morphberta-k` folder for morpheme labeling. 
+
 ## Usage
 
 # TODO: add some examples
@@ -37,7 +39,6 @@ python -m spacy download ru_core_news_lg
 
 List of projects and sources used in this repo:
  - Frequency dictionary of the Russian National Corpus. [О. Н. Ляшевская, С. А. Шаров. Частотный словарь современного русского языка (на материалах Национального корпуса русского языка)](http://dict.ruslang.ru/freq.php).
- - [Deep Convolutional Networks for Supervised Morpheme Segmentation of Russian Language](https://github.com/AlexeySorokin/NeuralMorphemeSegmentation)
  - [Tokenizer and morpheme segmentation model from Russian National Corpus](https://ruscorpora.ru/en/license-content/neuromodels)
  - [Stanza](https://stanfordnlp.github.io/stanza/)
  - [Spacy (ru_core_news_lg model)](https://spacy.io/models)

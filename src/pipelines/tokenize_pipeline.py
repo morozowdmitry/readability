@@ -5,7 +5,6 @@ import pandas as pd
 
 from src.pipelines.base_pipeline import BasePipeline
 from src.pipelines.exceptions import NoDataError
-from src.convertor.convert2df import texts2df
 from src.data_handlers.text import Text
 
 

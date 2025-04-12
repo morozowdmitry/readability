@@ -1,18 +1,22 @@
 import json
+from simpletransformers.ner import NERModel
+import pandas as pd
 
 from src.label.base_labeler import BaseLabeler
 from src.label.labels import LabelType
 from src.data_handlers.text import TokenType
 from src.data_handlers.morphemes import MorphemeParsing, Morpheme, MorphemeType
 from src.config import MORPHEME_CONFIG_PATH, MORPHODICT_PATH
-from src.label.NeuralMorphemeSegmentation.neural_morph_segm import load_cls
 
 
-class MorphemeCNNLabeler(BaseLabeler):
+class MorphemeBERTLabeler(BaseLabeler):
     def __init__(self):
         super().__init__()
         self.labels = {LabelType.MORPHEME}
-        self.model = load_cls(MORPHEME_CONFIG_PATH)
+        self.model = NERModel(
+            'roberta',
+            MORPHEME_CONFIG_PATH,
+        )
         self.morphodict = self._load_morphodict(morphodict_path=MORPHODICT_PATH)
 
     @staticmethod
@@ -37,12 +41,36 @@ class MorphemeCNNLabeler(BaseLabeler):
 
     def _parse_token(self, token):
         if token.lex not in self.morphodict:
-            morphemes = list()
-            labels, _ = self.model._predict_probs([token.lex])[0]
-            morpheme_labels, morpheme_types = self.model.labels_to_morphemes(
-                token.lex, labels, return_probs=False, return_types=True
+            eval_data = [(0, token.lex, '0')] + [(0, letter, '0') for letter in token.lex]
+            eval_data = pd.DataFrame(
+                eval_data, columns=["sentence_id", "words", "labels"]
             )
-            for morpheme_text, morpheme_label in zip(morpheme_labels, morpheme_types):
-                morphemes.append(Morpheme(label=MorphemeType(morpheme_label), text=morpheme_text))
+            result, model_outputs, preds_list = self.model.eval_model(eval_data, silent=True)
+            morphemes = self._convert2parsing(token.lex, preds_list[0][1:])
             self.morphodict[token.lex] = MorphemeParsing(morphemes=morphemes)
         token.morphemes = self.morphodict[token.lex]
+
+    @staticmethod
+    def _convert2parsing(lemma, bmes):
+        parsing = list()
+        current_mtype = ''
+        current_mtext = ''
+        for letter, label in zip(lemma, bmes):
+            pos = label[0]
+            mtype = label[2:]
+            if pos == 'S':
+                if current_mtext:
+                    parsing.append({"morpheme": current_mtext, "type": current_mtype})
+                parsing.append({"morpheme": letter, "type": mtype})
+                current_mtype = ''
+                current_mtext = ''
+            elif pos == 'B':
+                if current_mtext:
+                    parsing.append({"morpheme": current_mtext, "type": current_mtype})
+                current_mtext = letter
+                current_mtype = mtype
+            else:
+                current_mtext += letter
+        if current_mtext:
+            parsing.append({"morpheme": current_mtext, "type": current_mtype})
+        return [Morpheme(label=MorphemeType(x["type"]), text=x["morpheme"]) for x in parsing]

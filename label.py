@@ -10,7 +10,7 @@ from src.label.labels import LabelType
 from src.label.pymorphy import PymorphyLemmatizer
 from src.label.frequency import FrequencyLabeler
 from src.label.spacy_syntax import SpacySyntaxLabeler
-from src.label.morpheme import MorphemeCNNLabeler
+from src.label.morpheme import MorphemeBERTLabeler
 
 from src.feature_extract.variety_extractor import NAVExtractor, LexicalVarietyExtractor
 from src.feature_extract.lengths_extractor import LengthsExtractor
@@ -40,7 +40,7 @@ simple_config = PipelineConfig(
         (PymorphyLemmatizer(), {LabelType.MORPH, LabelType.LEMMA}),
         (FrequencyLabeler(), {LabelType.FREQUENCY, }),
         (SpacySyntaxLabeler(), {LabelType.SYNTAX, }),
-        (MorphemeCNNLabeler(), {LabelType.MORPHEME}),
+        (MorphemeBERTLabeler(), {LabelType.MORPHEME}),
     ],
     extractors=[
         NAVExtractor(),

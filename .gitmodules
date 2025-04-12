@@ -1,3 +1,0 @@
-[submodule "src/label/NeuralMorphemeSegmentation"]
-	path = src/label/NeuralMorphemeSegmentation
-	url = git@github.com:morozowdmitry/NeuralMorphemeSegmentation.git
