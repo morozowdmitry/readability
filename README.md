@@ -17,23 +17,25 @@ This repo contains code for evaluating linguistic features and readability level
    - SVM
    - RandomForest
    - CatBoost (TBA)
-   - Feedforward NN (TBA)
+   - Feedforward NN
    - Convolutional NN (TBA)
    - BERT (TBA)
 
 ## Installation
 
-# TODO: add guide
+The library has been tested on Python 3.10. When using newer versions of Python, you may need to replace pymorphy2 with [pymorphy3](https://github.com/no-plagiarism/pymorphy3), as the original library is no longer supported and is outdated.
 
+To install, you need to:
+1. Install the libraries listed in `requirements.txt`
+2. Load the spacy model with the command
 ```
 python -m spacy download ru_core_news_lg
 ```
-
-It is necessary to download morpheme model [Morphberta-K from the Russian National Corpus](https://ruscorpora.ru/license-content/neuromodels#section-15) and place model files in `external_resources/morphemes/morphberta-k` folder for morpheme labeling. 
+3. Download morpheme model [Morphberta-K from the Russian National Corpus](https://ruscorpora.ru/license-content/neuromodels#section-15) and place model files in `external_resources/morphemes/morphberta-k` folder for morpheme labeling.
 
 ## Usage
 
-# TODO: add some examples
+The root of the library contains examples of its use: data labeling (`label.py`), model training (`train.py`), running on test data and quality assessment (`inference.py`).
 
 ## External sources
 

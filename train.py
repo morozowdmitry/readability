@@ -23,6 +23,7 @@ from src.feature_extract.morpheme_extractor import MorphemeVarietyExtractor
 
 from src.vectorize.vectorizer import BoWVectorizer
 from src.vectorize.sentencebert import SentenceBertVectorizer
+from src.vectorize.lda import LDAVectorizer
 
 from src.predict.sklearn_predictors import SVCPredictor, RandomForestPredictor
 from src.predict.mlp_predictor import MLPPredictor
@@ -60,9 +61,10 @@ simple_config = PipelineConfig(
         SimpleSyntaxExtractor(),
         MorphemeVarietyExtractor(),
     ],
-    predictor=MLPPredictor(),
+    predictor=RandomForestPredictor(),
     scaler=SKLearnMinMaxScaler(model_path=DATA_PATH / f'models/test_scaler.pt'),
-    vectorizer=SentenceBertVectorizer(model_path=DATA_PATH / f'models/test_vectorizer.pt'),
+    vectorizer=BoWVectorizer(model_path=DATA_PATH / f'models/test_vectorizer.pt'),
+    topic_modeler=LDAVectorizer(model_path=DATA_PATH / f'models/test_topic_modeler.pt'),
 )
 
 

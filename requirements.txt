@@ -9,3 +9,6 @@ stanza~=1.9.2
 torch~=2.5.1
 simpletransformers~=0.70.1
 pandas~=2.2.3
+spacy~=3.8.2
+sentence-transformers~=4.0.2
+torchtext~=0.18.0
