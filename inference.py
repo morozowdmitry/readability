@@ -22,12 +22,16 @@ from src.feature_extract.syntax_extractor import SimpleSyntaxExtractor
 from src.feature_extract.morpheme_extractor import MorphemeVarietyExtractor
 
 from src.vectorize.vectorizer import BoWVectorizer
+from src.vectorize.sentencebert import SentenceBertVectorizer
 
 from src.predict.sklearn_predictors import SVCPredictor, RandomForestPredictor
+from src.predict.mlp_predictor import MLPPredictor
 
 from src.config import DATA_PATH, MODELS_PATH
 
+from src.utils.scaler import SKLearnMinMaxScaler
 from src.utils.metric import evaluate_metrics
+from src.utils.labels import label2class
 
 
 import argparse
@@ -58,14 +62,16 @@ simple_config = PipelineConfig(
         SimpleSyntaxExtractor(),
         MorphemeVarietyExtractor(),
     ],
-    predictor=RandomForestPredictor(),
-    vectorizer=BoWVectorizer(model_path=DATA_PATH / f'models/test_vectorizer.pt'),
+    predictor=MLPPredictor(),
+    scaler=SKLearnMinMaxScaler(model_path=DATA_PATH / f'models/test_scaler.pt'),
+    vectorizer=SentenceBertVectorizer(model_path=DATA_PATH / f'models/test_vectorizer.pt'),
 )
+
 
 
 if __name__ == "__main__":
     df = pd.read_csv(str(DATA_PATH / f'corpora/{args.corpus}/{args.dataset}.csv'))
-    targets = df["category"].tolist()
+    targets = [label2class(x) for x in df["category"].tolist()]
     simple_config.model_path = MODELS_PATH / f'models/test_model.pt'
     simple_config.model_path.parent.mkdir(exist_ok=True, parents=True)
     inference_pipeline = InferencePipeline(simple_config)

@@ -1,9 +1,3 @@
-from typing import Optional
-from src.utils.scaler import BaseScaler
-
-from pathlib import Path
-import pickle
-import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.svm import LinearSVC
 
